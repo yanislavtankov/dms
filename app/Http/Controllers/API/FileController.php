@@ -40,8 +40,8 @@ class FileController extends Controller
                 $fileName = time().'_'.$file->getClientOriginalName();
                 $file->move(public_path('upload'), $fileName);
 
-                $FilePathDoc = public_path()."\upload\\". $fileName;
-                $FilePathPdf = public_path()."\upload\\". $fileName . '.pdf';
+                $FilePathDoc = public_path()."/upload/". $fileName;
+                $FilePathPdf = public_path()."/upload/". $fileName . '.pdf';
 
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path() .'/vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererName( 'DomPDF' );
@@ -87,7 +87,7 @@ class FileController extends Controller
 
     public function deleteFile ( $id ) {
         $fileName = DB::select('SELECT path FROM documents WHERE id =' . $id);
-        File::delete( public_path() . '\upload\\' . $fileName[0]->path,  public_path() . '\upload\\' . str_replace('.pdf', '', $fileName[0]->path) );
+        File::delete( public_path() . '/upload/' . $fileName[0]->path,  public_path() . '/upload/' . str_replace('.pdf', '', $fileName[0]->path) );
         DB::table('documents')->where('id', $id)->delete();
     }
 
