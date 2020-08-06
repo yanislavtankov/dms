@@ -20,10 +20,10 @@ class FileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function listFiles ( $id ){
-        $companiesSQL = ($id == 0 ) ? '' : ' AND documents.company_id = '.$id;
-
+        $superUser = ( Auth::user()->type ) ? " WHERE user_id > 0" : " WHERE user_id = " . Auth::user()->id;
+        $companiesSQL = ($id == 0 ) ? '' : ' AND documents.company_id = ' . $id;
         $files = DB::select('
-            SELECT documents.id as id, companies.id as cid, companies.name as name, title, description, path FROM documents JOIN companies on companies.id = documents.company_id WHERE companies.id IN (SELECT id FROM companies WHERE user_id = ' . Auth::user()->id .')'. $companiesSQL);
+            SELECT documents.id as id, companies.id as cid, companies.name as name, title, description, path FROM documents JOIN companies on companies.id = documents.company_id WHERE companies.id IN (SELECT id FROM companies '. $superUser .')'. $companiesSQL);
 
         return response()->json([
             'files' => $files
@@ -36,15 +36,12 @@ class FileController extends Controller
         {
             $fileNum = 0;
             $files = $request->file('files');
-
-            // return $files;
-
             foreach ($files as $file) {
                 $fileName = time().'_'.$file->getClientOriginalName();
                 $file->move(public_path('upload'), $fileName);
 
-                $FilePathDoc = public_path()."/upload/". $fileName;
-                $FilePathPdf = public_path()."/upload/". $fileName . '.pdf';
+                $FilePathDoc = public_path()."\upload\\". $fileName;
+                $FilePathPdf = public_path()."\upload\\". $fileName . '.pdf';
 
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path() .'/vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererName( 'DomPDF' );
@@ -80,7 +77,7 @@ class FileController extends Controller
 
     public function getFile ( $id ) {
         $fileName = DB::select('SELECT path FROM documents WHERE id =' . $id);
-        $file = '/upload/' . $fileName[0]->path;
+        $file = '\upload\\' . $fileName[0]->path;
 
         return response()->json([
             'id' => $id,
@@ -90,7 +87,7 @@ class FileController extends Controller
 
     public function deleteFile ( $id ) {
         $fileName = DB::select('SELECT path FROM documents WHERE id =' . $id);
-        File::delete( public_path() . '/upload/' . $fileName[0]->path,  public_path() . '/upload/' . str_replace('.pdf', '', $fileName[0]->path) );
+        File::delete( public_path() . '\upload\\' . $fileName[0]->path,  public_path() . '\upload\\' . str_replace('.pdf', '', $fileName[0]->path) );
         DB::table('documents')->where('id', $id)->delete();
     }
 

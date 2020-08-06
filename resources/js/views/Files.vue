@@ -86,7 +86,6 @@
         },
 
         methods: {
-
             loadFiles ( id = 0) {
                 let currentObj = this
                 api.call('get', '/api/files/' + id)
