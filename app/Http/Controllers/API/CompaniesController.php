@@ -19,9 +19,7 @@ class CompaniesController extends Controller
     public function listCompanies (Request $request)
     {
         $tagRequested = (request('tag')) ? "AND c.id IN (SELECT company_id FROM tags WHERE tag = '". request('tag') ."')" : "";
-
         $unique = ( env("DB_CONNECTION") == 'pgsql' ) ? 'array_agg' : 'group_concat';
-
         $companies = DB::select('
             SELECT c.id, c.name, c.desc,
                 (SELECT '.$unique.'(t.tag)
