@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Documents;
 
-require_once base_path().'\vendor\autoload.php';
+require_once base_path().'/vendor/autoload.php';
 use Dompdf\Dompdf;
 
 class FileController extends Controller
