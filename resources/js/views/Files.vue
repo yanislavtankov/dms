@@ -131,7 +131,9 @@
                         currentObj.options.push({'value': 0, 'text': 'All files'})
                         response.data.companies.forEach((value, index, self) =>
                             {
-                                if (currentObj.items[index].cid == response.data.companies[index].id) {currentObj.options.push({'value': response.data.companies[index].id, 'text': response.data.companies[index].name})}
+                                if ((currentObj.items.length > 0) && (currentObj.items[index].cid == response.data.companies[index].id)) {
+                                    currentObj.options.push({'value': response.data.companies[index].id, 'text': response.data.companies[index].name})
+                                }
                             }
                         )
                         currentObj.company = 0

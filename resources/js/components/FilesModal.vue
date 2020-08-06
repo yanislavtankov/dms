@@ -88,7 +88,8 @@
 
         watch: {
             'title': 'enableSave',
-            'description': 'enableSave'
+            'description': 'enableSave',
+            'company': 'enableSave'
         },
 
         mounted() {
@@ -106,7 +107,7 @@
             },
 
             enableSave () {
-                this.disabled = this.validateForm()
+                this.disabled = !this.validateForm()
             },
 
             loadCompanies () {
@@ -126,16 +127,12 @@
             },
 
             validateForm (){
-                if(this.file){
-                    var extension = this.allowedExstensions.includes(this.file.name.split('.').pop())
-                    if(!extension){
-                        this.flash('Only doc/docx files allowed! Please select another file', 'warning', {
-                                timeout: 3000
-                        });
-                    }
+                if(typeof this.file.name !== 'undefined'){
+                    var extension = (typeof this.file.name === 'string') ?  this.allowedExstensions.includes(this.file.name.split('.').pop()) : false
+                    return (this.company && this.title != '' && this.description != '' && extension) ? true : false
+                } else {
+                    return false
                 }
-                var res = !(this.company && this.title && this.description && this.file && extension)
-                return res
             },
 
             onFileChange(e){
