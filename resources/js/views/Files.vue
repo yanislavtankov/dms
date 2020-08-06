@@ -91,16 +91,7 @@
                 let currentObj = this
                 api.call('get', '/api/files/' + id)
                 .then(function (response) {
-
-
                     if(response.status == 200){
-
-
-// console.log(response)
-// console.log(currentObj.options)
-
-
-
                         currentObj.items = response.data.files
                         currentObj.loading = false
                     }
@@ -128,13 +119,22 @@
                  api.call('get', '/api/companies')
                 .then(function (response) {
                     if(response.status == 200){
+                        var filesByCompany = []
+                        const unique = (value, index, self) => {
+                            return self.indexOf(value) === index
+                        }
+                        currentObj.items.forEach((value, index, self) => {
+                            filesByCompany.push(value.cid)
+                        })
+                        filesByCompany = filesByCompany.filter(unique)
+
                         currentObj.options.push({'value': 0, 'text': 'All files'})
                         response.data.companies.forEach((value, index, self) =>
                             {
-                                if ((currentObj.items.length > 0) && (currentObj.items[index].cid == response.data.companies[index].id)) {
+                                if (filesByCompany.includes(response.data.companies[index].id)) {
                                     currentObj.options.push({'value': response.data.companies[index].id, 'text': response.data.companies[index].name})
                                 }
-                            }
+                           }
                         )
                         currentObj.company = 0
                         // currentObj.companies = (typeof currentObj.options !== 'undefined' && currentObj.options.length > 0) ? true : false
