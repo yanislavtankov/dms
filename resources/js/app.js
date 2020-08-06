@@ -17,8 +17,9 @@ import VueFlashMessage from 'vue-flash-message';
 import SlimDialog from 'v-slim-dialog'
 import { BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
+import Lightbox from 'vue-my-photos'
 
-
+Vue.component('lightbox', Lightbox);
 
 
 

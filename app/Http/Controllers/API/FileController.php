@@ -39,16 +39,13 @@ class FileController extends Controller
             foreach ($files as $file) {
                 $fileName = time().'_'.$file->getClientOriginalName();
                 $file->move(public_path('upload'), $fileName);
-
                 $FilePathDoc = public_path()."/upload/". $fileName;
                 $FilePathPdf = public_path()."/upload/". $fileName . '.pdf';
-
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path() .'/vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererName( 'DomPDF' );
                 $phpWord = \PhpOffice\PhpWord\IOFactory::load( $FilePathDoc );
                 $pdfWriter = \PhpOffice\PhpWord\IOFactory::createWriter( $phpWord, 'PDF' );
                 $pdfWriter->save($FilePathPdf);
-
                 $this->validate($request, [
                     'company' => 'required',
                     'title' => 'required',

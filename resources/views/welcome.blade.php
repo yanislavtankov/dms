@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <meta rel="stylesheet" href="https://unpkg.com/vue-my-photos/dist/lightbox.css">
+        <script src="https://unpkg.com/vue-my-photos/dist/lightbox.js"></script>
+
 
         <title>DMS for Office and Dragons</title>
     </head>
