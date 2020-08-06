@@ -129,7 +129,7 @@
             validateForm (){
                 if(typeof this.file.name !== 'undefined'){
                     var extension = (typeof this.file.name === 'string') ?  this.allowedExstensions.includes(this.file.name.split('.').pop()) : false
-                    return (this.company && this.title != '' && this.description != '' && extension) ? true : false
+                    return (this.company && this.title != '' && this.description != '' && extension)
                 } else {
                     return false
                 }
@@ -137,7 +137,7 @@
 
             onFileChange(e){
                 this.file = e.target.files[0];
-                this.validateForm()
+                this.enableSave()
             },
 
             formSubmit: function () {
