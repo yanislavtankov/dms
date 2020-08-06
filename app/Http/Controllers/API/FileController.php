@@ -33,16 +33,25 @@ class FileController extends Controller
     }
 
     public function addFile ( Request $request ) {
-        if($request->hasFile('files') && request('user') == Auth::user()->id)
+
+
+        // return $request->hasFile('files');
+
+
+        if($request->hasFile('files') && request('user') == 2)
+        // if($request->hasFile('files') && request('user') == Auth::user()->id)
         {
             $fileNum = 0;
             $files = $request->file('files');
+
+            // return $files;
+
             foreach ($files as $file) {
                 $fileName = time().'_'.$file->getClientOriginalName();
                 $file->move(public_path('upload'), $fileName);
 
-                $FilePathDoc = public_path()."\upload\\". $fileName;
-                $FilePathPdf = public_path()."\upload\\". $fileName . '.pdf';
+                $FilePathDoc = public_path()."/upload/". $fileName;
+                $FilePathPdf = public_path()."/upload/". $fileName . '.pdf';
 
                 \PhpOffice\PhpWord\Settings::setPdfRendererPath(base_path() .'/vendor/dompdf/dompdf');
                 \PhpOffice\PhpWord\Settings::setPdfRendererName( 'DomPDF' );
@@ -78,7 +87,7 @@ class FileController extends Controller
 
     public function getFile ( $id ) {
         $fileName = DB::select('SELECT path FROM documents WHERE id =' . $id);
-        $file = '\upload\\' . $fileName[0]->path;
+        $file = '/upload/' . $fileName[0]->path;
 
         return response()->json([
             'id' => $id,
@@ -88,7 +97,7 @@ class FileController extends Controller
 
     public function deleteFile ( $id ) {
         $fileName = DB::select('SELECT path FROM documents WHERE id =' . $id);
-        File::delete( public_path() . '\upload\\' . $fileName[0]->path,  public_path() . '\upload\\' . str_replace('.pdf', '', $fileName[0]->path) );
+        File::delete( public_path() . '/upload/' . $fileName[0]->path,  public_path() . '/upload/' . str_replace('.pdf', '', $fileName[0]->path) );
         DB::table('documents')->where('id', $id)->delete();
     }
 
