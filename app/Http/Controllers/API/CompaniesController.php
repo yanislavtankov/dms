@@ -18,17 +18,19 @@ class CompaniesController extends Controller
      */
     public function listCompanies (Request $request)
     {
-        $tagRequested = (request('tag')) ? "AND c.id IN (SELECT company_id FROM tags WHERE tag = '". request('tag') ."')" : "";
+        $superUser = ( Auth::user()->type ) ? " WHERE c.user_id > 0" : " WHERE ( c.user_id = " . Auth::user()->id . ")";
+        $tagRequested = (request('tag')) ? " AND c.id IN (SELECT company_id FROM tags WHERE tag = '". request('tag') ."')" : "";
         $unique = ( env("DB_CONNECTION") == 'pgsql' ) ? 'array_agg' : 'group_concat';
+
         $companies = DB::select('
             SELECT c.id, c.name, c.desc,
                 (SELECT '.$unique.'(t.tag)
                     FROM tags as t
                 WHERE c.id = t.company_id)
             AS tags
-            FROM companies AS c
-            WHERE ( c.user_id = ' . Auth::user()->id . ')
-            '.$tagRequested.'
+            FROM companies AS c'
+            . $superUser
+            . $tagRequested . '
             ORDER BY c.id
         ');
 

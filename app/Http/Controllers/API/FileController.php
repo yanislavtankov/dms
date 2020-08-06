@@ -20,7 +20,6 @@ class FileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function listFiles ( $id ){
-
         $companiesSQL = ($id == 0 ) ? '' : ' AND documents.company_id = '.$id;
 
         $files = DB::select('
@@ -33,13 +32,7 @@ class FileController extends Controller
     }
 
     public function addFile ( Request $request ) {
-
-
-        // return $request->hasFile('files');
-
-
-        if($request->hasFile('files') && request('user') == 2)
-        // if($request->hasFile('files') && request('user') == Auth::user()->id)
+        if($request->hasFile('files') && request('user') == Auth::user()->id)
         {
             $fileNum = 0;
             $files = $request->file('files');
